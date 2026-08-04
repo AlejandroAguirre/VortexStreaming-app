@@ -1,0 +1,28 @@
+.favorite-btn{
+    position:absolute;
+    top:20px;
+    right:70px;
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:50%;
+    background:rgba(0,0,0,.6);
+    font-size:25px;
+    cursor:pointer;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.2s;
+    position: static;
+}
+
+
+.favorite-btn:hover{
+    transform:scale(1.15);
+}
+
+
+.favorite-btn.favorite{
+    color:#ff3b5c;
+}

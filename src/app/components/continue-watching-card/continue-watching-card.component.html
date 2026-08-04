@@ -1,0 +1,26 @@
+<h3>Continuar viendo:</h3>
+
+<div class="carousel-container">
+
+    <div class="carousel">
+
+        <div class="continue-card" (click)="play()">
+            <div class="image-container">
+                <img [src]="image" [alt]="item.name">
+
+                <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="progress"></div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="title">{{ item.name }}</div>
+                <div class="remaining">{{ remainingTime }}</div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<app-video-modal [(videoUrl)]="selectedURL" [video]="selectedVideo">
+</app-video-modal>

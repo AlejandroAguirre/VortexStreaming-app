@@ -1,0 +1,25 @@
+<h3>Favoritos</h3>
+<div class="recent-section">
+    <div class="carousel-container">
+        <button class="arrow" (click)="moveLeft()">
+            ◀
+        </button>
+        <div class="carousel" #carousel (mousedown)="mouseDown($event)" (mouseleave)="mouseLeave()"
+            (mouseup)="mouseUp()" (mousemove)="mouseMove($event)">
+            <div class="recent-card" *ngFor="let video of videos" (mouseenter)="startPreview(video)"
+                (mouseleave)="stopPreview()" (click)="play(video)">
+                <button class="favorite-btn" [class.favorite]="video.liked"
+                    (click)="like(video); $event.stopPropagation()">
+                    {{ video.liked ? '❤️' : '🤍' }}
+                </button>
+                <img [src]="getPreviewFrame(video)" [alt]="video.name">
+                <div>{{video.name}}</div>
+            </div>
+        </div>
+        <button class="arrow" (click)="moveRight()">
+            ▶
+        </button>
+    </div>
+</div>
+<app-video-modal [(videoUrl)]="selectedURL" [video]="selectedVideo">
+</app-video-modal>

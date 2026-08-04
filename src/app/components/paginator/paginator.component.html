@@ -1,0 +1,31 @@
+<ul class="pagination" style="overflow: scroll;">
+    @if (paginator.number>0) {
+    <li class="page-item">
+        <a class="page-link" [routerLink]="[url,paginator.number-1]" queryParamsHandling="merge">
+            &laquo;
+        </a>
+    </li>
+    }
+    <li [ngClass]="paginator.first==true?'disabled page-item':'page-item'">
+        <a class="page-link" [routerLink]="[url,0]" queryParamsHandling="merge">Primera</a>
+    </li>
+
+    @for (pagina of paginas; track $index) {
+    <li class="page-item" [ngClass]="pagina-1==paginator.number? 'active':'' ">
+        @if(pagina-1==paginator.number){
+        <span class="page-link">{{pagina}}</span>
+        }
+        @if(pagina-1!=paginator.number){
+        <a class="page-link" [routerLink]="[url,pagina-1]" queryParamsHandling="merge">{{pagina}}</a>
+        }
+    </li>
+    }
+
+    <li [ngClass]="paginator.last?'disabled page-item':'page-item'">
+        <a class="page-link" [routerLink]="[url,paginator.totalPages-1]" queryParamsHandling="merge">Ultima</a>
+    </li>
+    @if(paginator.number < paginator.totalPages-1){ <li class="page-item">
+        <a class="page-link" [routerLink]="[url,paginator.number+1]" queryParamsHandling="merge">&raquo;</a>
+        </li>
+        }
+</ul>

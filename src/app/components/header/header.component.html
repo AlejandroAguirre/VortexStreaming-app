@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" >OTT Web v1.0</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Trace Monitoring
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item"  [routerLink]="['/log']">Trace Monitoring </a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Catalog Manager
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" [routerLink]="['/manager/netflixInfo/page/0']">Account Netflix Info</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/manager/netflixEquipment/page/0']">Account Equipment</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/manager/user/page/0']">Usuarios</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAuth">
+                <span class="nav-item nav-link text-primary mx-3">
+
+                    <!--@else {
+                        <a class="btn btn-outline-primary"
+                        [routerLink]="['NetflixWeb/login']">Sign In</a>
+                }-->
+                </span>
+            </div>
+        </div>
+    </div>
+</nav>

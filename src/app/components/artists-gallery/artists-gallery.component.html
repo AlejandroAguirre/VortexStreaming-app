@@ -1,0 +1,40 @@
+<h3>Explorar biblioteca</h3>
+<div class="carousel-container">
+    <button class="arrow" (click)="moveLeft()">
+        ◀
+    </button>
+    <div class="carousel" #carousel (mousedown)="mouseDown($event)" (mouseleave)="mouseLeave()" (mouseup)="mouseUp()"
+        (mousemove)="mouseMove($event)">
+        <div class="recent-card" *ngFor="let video of videos" (mouseenter)="startPreview(video)"
+            (mouseleave)="stopPreview()" (click)="clickVideo(video)">
+            <button *ngIf="showingVideos" class="favorite-btn" [class.favorite]="video.liked"
+                (click)="like(video); $event.stopPropagation()">
+                {{ video.liked ? '❤️' : '🤍' }}
+            </button>
+            <!-- VIDEO -->
+            <ng-container *ngIf="video.type === 'file'; else folderTemplate">
+                <img [src]="getPreviewFrame(video)" [alt]="video.name">
+            </ng-container>
+            <!-- CARPETA -->
+            <ng-template #folderTemplate>
+                <div class="folder-collage" [class.single]="video.thumbnails.length === 1">
+                    <img *ngFor="let thumb of video.thumbnails" [src]="commonService.getAbsoluteUrl(thumb)">
+                    <ng-container *ngIf="!video.thumbnails.length">
+                        <img src="assets/folder-icon.png">
+                    </ng-container>
+                </div>
+            </ng-template>
+            <div class="video-name">
+                {{video.name}}
+            </div>
+        </div>
+    </div>
+    <button class="arrow" (click)="moveRight()">
+        ▶
+    </button>
+</div>
+<div class="results-count">
+    {{videos.length}} resultados encontrados
+</div>
+<app-video-modal [(videoUrl)]="selectedURL" [video]="selectedVideo">
+</app-video-modal>
