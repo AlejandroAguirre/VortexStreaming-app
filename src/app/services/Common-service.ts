@@ -11,16 +11,21 @@ import { Page } from '../model/Page';
 @Injectable({
   providedIn: 'root',
 })
+@Injectable({
+  providedIn: 'root',
+})
 export class CommonService {
+
   private urlBase = environment.urlBase;
-  private urlEndPointLog: string = this.urlBase + '/api/vortex';
+  private urlEndPointLog = `${this.urlBase}/vortex`;
+
   constructor(
     private http: HttpClient,
     private router: Router,
   ) {}
 
   getThumbnail(path: string): string {
-    return `${this.urlEndPointLog}/thumbnail?path=` + encodeURIComponent(path);
+    return `${this.urlEndPointLog}/thumbnail?path=${encodeURIComponent(path)}`;
   }
 
   getAbsoluteUrl(relativePath: string): string {
@@ -29,27 +34,31 @@ export class CommonService {
 
   getPreviews(path: string): Observable<string[]> {
     return this.http.get<string[]>(
-      `${this.urlEndPointLog}/previews?path=${encodeURIComponent(path)}`,
+      `${this.urlEndPointLog}/previews?path=${encodeURIComponent(path)}`
     );
   }
 
+  
   // ----------------------------
   // Continue Watching
   // ----------------------------
-
+  
   getContinueWatching(page = 0, size = 10): Observable<Page<FileEntity>> {
     return this.http.get<Page<FileEntity>>(
-      `${this.urlBase}/api/vortex/continue?page=${page}&size=${size}`,
+      `${this.urlEndPointLog}/continue?page=${page}&size=${size}`
     );
   }
 
   saveContinueWatching(request: ContinueWatchingRequest): Observable<void> {
-    return this.http.post<void>(`${this.urlBase}/api/vortex/continue`, request);
+    return this.http.post<void>(
+      `${this.urlEndPointLog}/continue`,
+      request
+    );
   }
 
   removeContinueWatching(videoId: number): Observable<void> {
     return this.http.delete<void>(
-      `${this.urlBase}/api/vortex/continue/${videoId}`,
+      `${this.urlEndPointLog}/continue/${videoId}`
     );
   }
 }

@@ -11,21 +11,21 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+RUN npm run build -- --configuration production
 
 # ===============================
 # Etapa 2 - Nginx
 # ===============================
 FROM nginx:1.29-alpine
 
+
 COPY --from=builder /app/dist/vortex-streaming-app/browser /usr/share/nginx/html
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+RUN rm /etc/nginx/conf.d/default.conf
+
+
+COPY nginx/nginx.conf /etc/nginx/templates/default.conf.template
+
 
 EXPOSE 80
-
-HEALTHCHECK --interval=30s \
-            --timeout=3s \
-            --start-period=10s \
-            --retries=3 \
-CMD wget --spider -q http://localhost/ || exit 1

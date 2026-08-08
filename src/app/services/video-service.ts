@@ -12,7 +12,7 @@ import { Page } from '../model/Page';
 })
 export class VideoService {
   private urlBase = environment.urlBase;
-  private urlEndPointLog: string = this.urlBase + '/api/vortex';
+  private urlEndPointLog = `${this.urlBase}/vortex`;
 
   constructor(
     private http: HttpClient,
@@ -21,6 +21,7 @@ export class VideoService {
 
   getVideos(path: string = ''): Observable<FileEntity[]> {
     const params = path ? `?path=${encodeURIComponent(path)}` : '';
+
     return this.http.get<FileEntity[]>(
       `${this.urlEndPointLog}/videos${params}`,
     );
@@ -33,12 +34,12 @@ export class VideoService {
     );
   }
 
-  searchVideos(text: string,page: number = 0,size: number = 20,): Observable<Page<FileEntity>> {
+  searchVideos(text: string,page = 0,size = 20,): Observable<Page<FileEntity>> {
     return this.http.get<Page<FileEntity>>(
       `${this.urlEndPointLog}/search?q=${encodeURIComponent(text)}&page=${page}&size=${size}`,
     );
   }
-  
+
   getRecentVideos(page = 0, size = 11): Observable<Page<FileEntity>> {
     return this.http.get<Page<FileEntity>>(
       `${this.urlEndPointLog}/recent?page=${page}&size=${size}`,
