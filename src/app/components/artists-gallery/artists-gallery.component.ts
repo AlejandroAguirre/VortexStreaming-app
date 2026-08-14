@@ -12,6 +12,7 @@ import { FileEntity } from '../../model/FileEntity';
 import { CommonService } from '../../services/Common-service';
 import { VideoService } from '../../services/video-service';
 import { VideoModalComponent } from '../shared/video-modal/video-modal.component';
+
 @Component({
   selector: 'app-artists-gallery',
   standalone: true,
@@ -59,14 +60,23 @@ export class ArtistsGalleryComponent extends PreviewableComponent {
     return 'assets/folder-icon.png';
   }
 
-  clickVideo(video: FileEntity): void {
-    if (video.type === 'folder') {
-      this.folderSelected.emit(video);
-      return;
-    }
-    this.selectedVideo = video;
-    this.selectedURL = this.logService.getVideo(video.path);
+clickVideo(video: FileEntity): void {
+  if (video.type === 'folder') {
+    this.logService.getVideos(video.path).subscribe((children) => {
+      if (children.length === 1 && children[0].type === 'file') {
+        // La carpeta solo tiene un video: reproducir directo, sin entrar
+        const singleVideo = children[0];
+        this.selectedVideo = singleVideo;
+        this.selectedURL = this.logService.getVideo(singleVideo.path);
+      } else {
+        this.folderSelected.emit(video);
+      }
+    });
+    return;
   }
+  this.selectedVideo = video;
+  this.selectedURL = this.logService.getVideo(video.path);
+}
 
   startPreview(video: FileEntity): void {
     if (video.type !== 'file') {

@@ -1,31 +1,32 @@
-<h2>Vortex Video</h2>
-<input type="text" [(ngModel)]="searchTerm" (input)="filterVideos()" placeholder="Buscar videos..."
-  class="search-input" />
+<div class="page-container">
 
-<!--recien agregados -->
-<app-recent-carousel [videos]="recentVideos">
-</app-recent-carousel>
+  <h2>Vortex Video</h2>
 
-<!--Me gustan -->
-<app-favorites-carousel [videos]="favoriteVideos">
-</app-favorites-carousel>
+  <div class="search">
+    <input type="text" [(ngModel)]="searchTerm" (input)="filterVideos()" placeholder="Buscar videos..."
+      class="search-input" />
+  </div>
 
-<!-- Seguir viendo -->
-<div class="continue-container">
-    <app-continue-watching-card
-        *ngFor="let video of continueWatching"
-        [item]="video" (playItem)="playContinue($event)">
+  <app-recent-carousel [videos]="recentVideos">
+  </app-recent-carousel>
+
+  <app-favorites-carousel [videos]="favoriteVideos">
+  </app-favorites-carousel>
+
+  <div class="continue-container">
+    <app-continue-watching-card *ngFor="let video of continueWatching" [item]="video" (playItem)="playContinue($event)">
     </app-continue-watching-card>
-</div>
+  </div>
 
-
-<div class="video-gallery">
-  <button class="theme-toggle" (click)="toggleDarkMode()">Cambiar modo</button>
-  <button *ngIf="currentPath" (click)="goBack()">Regresar</button>
-
-  <!--Seccion de artistas -->
-  <app-artists-gallery [videos]="filteredVideos" [currentPath]="currentPath" (folderSelected)="openFolder($event)"
-    (goBackClick)="goBack()">
-  </app-artists-gallery>
-
+  <div class="video-gallery" [class.searching]="isSearching">
+    <button class="theme-toggle" (click)="toggleDarkMode()">
+      Cambiar modo
+    </button>
+    <button *ngIf="currentPath" class="back-button" (click)="goBack()">
+      ← Regresar
+    </button>
+    <app-artists-gallery [videos]="filteredVideos" [currentPath]="currentPath" (folderSelected)="openFolder($event)"
+      (goBackClick)="goBack()">
+    </app-artists-gallery>
+  </div>
 </div>

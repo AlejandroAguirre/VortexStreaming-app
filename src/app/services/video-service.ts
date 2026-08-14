@@ -34,7 +34,11 @@ export class VideoService {
     );
   }
 
-  searchVideos(text: string,page = 0,size = 20,): Observable<Page<FileEntity>> {
+  searchVideos(
+    text: string,
+    page = 0,
+    size = 20,
+  ): Observable<Page<FileEntity>> {
     return this.http.get<Page<FileEntity>>(
       `${this.urlEndPointLog}/search?q=${encodeURIComponent(text)}&page=${page}&size=${size}`,
     );
@@ -66,5 +70,33 @@ export class VideoService {
           video.liked = true;
         });
     }
+  }
+
+  listenThumbnailGeneration(): Observable<number> {
+    return new Observable<number>((observer) => {
+      const eventSource = new EventSource(
+        `${this.urlEndPointLog}/thumbnails/events`,
+      );
+
+      const onFinished = (event: MessageEvent) => {
+        const total = Number(event.data);
+        observer.next(total);
+      };
+
+      eventSource.addEventListener('thumbnails-finished', onFinished);
+
+      eventSource.onerror = (error) => {
+        console.warn(
+          'SSE connection error. EventSource will attempt to reconnect.',
+          error,
+        );
+      };
+
+      return () => {
+        eventSource.removeEventListener('thumbnails-finished', onFinished);
+
+        eventSource.close();
+      };
+    });
   }
 }

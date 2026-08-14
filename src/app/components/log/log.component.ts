@@ -30,6 +30,7 @@ export class LogComponent
   extends PreviewableComponent
   implements OnInit, OnDestroy
 {
+  private notificationAudio = new Audio('assets/sounds/notification.m4a');
   videos: FileEntity[] = [];
   filteredVideos: FileEntity[] = [];
   recentVideos: FileEntity[] = [];
@@ -42,6 +43,7 @@ export class LogComponent
   currentPage = 0;
   selectedURL: string | null = null;
   selectedVideo: FileEntity | null = null;
+  isSearching = false;
 
   constructor(
     public logService: VideoService,
@@ -61,6 +63,11 @@ export class LogComponent
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.body.classList.add('dark');
     }
+    this.loadInitialData();
+    this.listenThumbnailEvents();
+  }
+
+  private loadInitialData(): void {
     this.loadVideos();
     this.loadRecentVideos();
     this.loadFavorites();
@@ -100,6 +107,7 @@ export class LogComponent
 
   filterVideos(): void {
     const term = this.searchTerm.trim();
+    this.isSearching = term.length > 0;
     if (!term) {
       this.filteredVideos = [...this.videos];
       return;
@@ -125,6 +133,25 @@ export class LogComponent
     this.selectedVideo = video;
     this.selectedURL = this.logService.getVideo(video.path);
     console.log('URL GENERADA:', this.selectedURL);
+  }
+
+  private listenThumbnailEvents(): void {
+    this.logService.listenThumbnailGeneration().subscribe({
+      next: (total) => {
+        console.log(`Se generaron ${total} thumbnails`);
+
+        this.notificationAudio.currentTime = 0;
+
+        this.notificationAudio.play().catch((error) => {
+          console.warn('No se pudo reproducir el sonido:', error);
+        });
+
+        this.loadRecentVideos();
+      },
+      error: (error) => {
+        console.error('Error escuchando eventos de thumbnails', error);
+      },
+    });
   }
 
   ngOnDestroy(): void {

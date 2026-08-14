@@ -8,7 +8,7 @@ import { VideoModalComponent } from '../shared/video-modal/video-modal.component
 @Component({
   selector: 'app-continue-watching-card',
   standalone: true,
-  imports: [CommonModule,VideoModalComponent],
+  imports: [CommonModule, VideoModalComponent],
   templateUrl: './continue-watching-card.component.html',
   styleUrls: ['./continue-watching-card.component.css'],
 })
@@ -19,17 +19,18 @@ export class ContinueWatchingCardComponent {
   @Output()
   playItem = new EventEmitter<FileEntity>();
 
-
   selectedURL: string | null = null;
 
   selectedVideo: FileEntity | null = null;
 
-
-  constructor(public commonService: CommonService, private videoService: VideoService) {}
-play() {
+  constructor(
+    public commonService: CommonService,
+    private videoService: VideoService,
+  ) {}
+  play() {
     this.selectedVideo = this.item;
     this.selectedURL = this.videoService.getVideo(this.item.path);
-}
+  }
 
   get image(): string {
     if (this.item.continueImage) {
@@ -59,6 +60,4 @@ play() {
     }
     return `${minutes} min restantes`;
   }
-
-  
 }
