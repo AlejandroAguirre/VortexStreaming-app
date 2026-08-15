@@ -40,8 +40,8 @@ body.dark {
 }
 
 body {
-  --bg-color: #fff;
-  --text-color: #222;
+  --bg-color: #8d9ca3;
+  --text-color: #3d042f;
   --overlay-bg: rgba(0, 0, 0, 0.95);
   --video-title-color: #333;
 
@@ -190,4 +190,136 @@ body {
 
 .back-button:active {
   transform: translateX(0);
+}
+
+
+/*Activar sonido*/
+.sound-banner {
+  width: 100%;
+  max-width: 520px;
+  margin: 10px auto 20px;
+  padding: 10px 14px;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+
+  animation: soundBannerIn 0.4s ease-out;
+}
+
+.sound-banner-btn {
+  width: 100%;
+  max-width: 420px;
+
+  padding: 13px 20px;
+
+  border: 1px solid rgba(176, 0, 255, 0.65);
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(35, 20, 50, 0.95),
+      rgba(20, 20, 30, 0.95)
+    );
+
+  color: #eee;
+
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 0 8px rgba(176, 0, 255, 0.25),
+    0 0 20px rgba(128, 0, 255, 0.15),
+    inset 0 0 12px rgba(176, 0, 255, 0.08);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.sound-banner-btn:hover {
+  transform: translateY(-2px);
+
+  border-color: #c000ff;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(55, 25, 75, 0.95),
+      rgba(25, 20, 35, 0.98)
+    );
+
+  box-shadow:
+    0 0 10px rgba(176, 0, 255, 0.45),
+    0 0 25px rgba(128, 0, 255, 0.3),
+    inset 0 0 15px rgba(176, 0, 255, 0.12);
+}
+
+.sound-banner-btn:active {
+  transform: scale(0.97);
+}
+
+.sound-icon {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 18px;
+
+  animation: bellPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes bellPulse {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+
+  10% {
+    transform: rotate(-10deg);
+  }
+
+  20% {
+    transform: rotate(10deg);
+  }
+
+  30% {
+    transform: rotate(-6deg);
+  }
+
+  40% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes soundBannerIn {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .sound-banner {
+    padding: 8px 12px;
+    margin: 5px auto 15px;
+  }
+
+  .sound-banner-btn {
+    max-width: none;
+    padding: 14px 16px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
 }

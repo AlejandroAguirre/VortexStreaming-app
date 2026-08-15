@@ -1,6 +1,12 @@
 <div class="page-container">
 
   <h2>Vortex Video</h2>
+<div *ngIf="showSoundBanner && isMobileDevice" class="sound-banner">
+  <button class="sound-banner-btn" (click)="enableSound()">
+    <span class="sound-icon">🔔</span>
+    <span>Activar sonido</span>
+  </button>
+</div>
 
   <div class="search">
     <input type="text" [(ngModel)]="searchTerm" (input)="filterVideos()" placeholder="Buscar videos..."

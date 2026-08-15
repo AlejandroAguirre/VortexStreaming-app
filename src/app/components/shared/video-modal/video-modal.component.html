@@ -1,15 +1,13 @@
-<div class="modal" *ngIf="videoUrl" (click)="close()">
-
-<video
-  #player
-  class="modal-video"
-  controls
-  autoplay
-  [src]="videoUrl"
-  (loadedmetadata)="restorePosition()"
-  (timeupdate)="onTimeUpdate()"
-  (click)="$event.stopPropagation()">
-</video>
+<div class="modal" [class.modal-hidden]="!videoUrl" (click)="close()">
+  <video
+    #player
+    class="modal-video"
+    controls
+    playsinline
+    (loadedmetadata)="restorePosition()"
+    (timeupdate)="onTimeUpdate()"
+    (click)="$event.stopPropagation()">
+  </video>
   <button class="close-btn" (click)="close()">
     ✕
   </button>

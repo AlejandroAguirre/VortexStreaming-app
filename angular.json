@@ -96,7 +96,8 @@
               "buildTarget": "VortexStreaming-app:build:qa"
             },
             "development": {
-              "buildTarget": "VortexStreaming-app:build:development"
+              "buildTarget": "VortexStreaming-app:build:development",
+              "hmr": false
             }
           },
           "defaultConfiguration": "development"
