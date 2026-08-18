@@ -4,55 +4,56 @@ import {
   ElementRef,
   ViewChild,
   Input,
-  HostListener,
+  inject,
 } from '@angular/core';
 import { VideoService } from '../../services/video-service';
 import { CommonService } from '../../services/Common-service';
-import { VideoModalComponent } from '../shared/video-modal/video-modal.component';
+import { VideoPlayerService } from '../../services/VideoPlayerService ';
 import { PreviewableComponent } from '../shared/preview/PreviewableComponent';
 import { FileEntity } from '../../model/FileEntity';
 
 @Component({
   selector: 'app-recent-carousel',
+  standalone: true,
   templateUrl: './recent-carousel.component.html',
   styleUrls: ['./recent-carousel.component.css'],
-  imports: [CommonModule, VideoModalComponent],
+  imports: [CommonModule],
 })
-export class RecentCarouselComponent extends PreviewableComponent{
+export class RecentCarouselComponent extends PreviewableComponent {
+  protected getThumbnail(video: FileEntity): string {
+    return this.commonService.getAbsoluteUrl(video.thumbnails[0]);
+  }
 
-protected getThumbnail(video: FileEntity): string {
-  return this.commonService.getAbsoluteUrl(video.thumbnails[0]);
-}
   @Input()
   videos: any[] = [];
-  selectedURL: string | null = null;
   isDown = false;
   startX = 0;
   scrollLeft = 0;
   isDragging = false;
-  selectedVideo: any = null;
+
+  private videoPlayerService = inject(VideoPlayerService);
 
   @ViewChild('carousel')
   carousel!: ElementRef;
-  constructor(public logService: VideoService,public commonService:CommonService) {super();}
+
+  constructor(
+    public logService: VideoService,
+    public commonService: CommonService,
+  ) {
+    super();
+  }
+
   moveLeft() {
-    this.carousel.nativeElement.scrollBy({
-      left: -300,
-      behavior: 'smooth',
-    });
+    this.carousel.nativeElement.scrollBy({ left: -300, behavior: 'smooth' });
   }
 
   moveRight() {
-    this.carousel.nativeElement.scrollBy({
-      left: 300,
-      behavior: 'smooth',
-    });
+    this.carousel.nativeElement.scrollBy({ left: 300, behavior: 'smooth' });
   }
 
   startPreview(video: any) {
     this.hoveringVideo = video;
     this.previewIndex = 0;
-
     this.previewFrames = video.thumbnails.map((t: string) =>
       this.commonService.getAbsoluteUrl(t),
     );
@@ -63,9 +64,7 @@ protected getThumbnail(video: FileEntity): string {
   }
 
   play(video: any) {
-      console.log(video);
-    this.selectedVideo = video;
-    this.selectedURL = this.logService.getVideo(video.path);
+    this.videoPlayerService.play(video, this.logService.getVideo(video.path));
   }
 
   mouseDown(event: any) {
@@ -92,6 +91,6 @@ protected getThumbnail(video: FileEntity): string {
   }
 
   like(video: any) {
-  this.logService.like(video);
-}
+    this.logService.like(video);
+  }
 }

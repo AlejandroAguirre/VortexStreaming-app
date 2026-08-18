@@ -167,3 +167,22 @@
     margin-top: 15px;
     color: var(--text-color);
 }
+
+@media (max-width: 768px) {
+    .recent-card {
+        min-width: 40vw;
+    }
+    .recent-card img,
+    .folder-collage {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+    }
+    .carousel {
+        gap: 10px;
+        padding: 15px 8px;
+    }
+    .arrow {
+        display: none;
+    }
+}

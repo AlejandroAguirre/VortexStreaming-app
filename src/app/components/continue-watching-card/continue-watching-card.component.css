@@ -75,3 +75,14 @@
         0 0 0 1px rgba(72,255,0,0.8),
         0 0 12px rgba(72,255,0,0.5);
 }
+
+@media (max-width: 768px) {
+    .continue-container {
+        gap: 10px;
+        padding: 15px 8px;
+    }
+    .continue-card {
+        width: 45vw;
+        min-width: 45vw;
+    }
+}

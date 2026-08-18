@@ -1,4 +1,4 @@
-<div class="modal" [class.modal-hidden]="!videoUrl" (click)="close()">
+<div class="modal" [class.modal-hidden]="!videoPlayerService.selectedURL()" (click)="close()">
   <video
     #player
     class="modal-video"
@@ -8,9 +8,7 @@
     (timeupdate)="onTimeUpdate()"
     (click)="$event.stopPropagation()">
   </video>
-  <button class="close-btn" (click)="close()">
-    ✕
-  </button>
+  <button class="close-btn" (click)="close()">✕</button>
   <button class="favorite-btn" [class.favorite]="video?.liked" (click)="like(); $event.stopPropagation()">
     {{ video?.liked ? '❤️' : '🤍' }}
   </button>

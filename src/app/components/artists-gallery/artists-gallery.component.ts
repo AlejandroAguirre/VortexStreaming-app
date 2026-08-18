@@ -5,18 +5,19 @@ import {
   Input,
   Output,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PreviewableComponent } from '../shared/preview/PreviewableComponent';
 import { FileEntity } from '../../model/FileEntity';
 import { CommonService } from '../../services/Common-service';
 import { VideoService } from '../../services/video-service';
-import { VideoModalComponent } from '../shared/video-modal/video-modal.component';
+import { VideoPlayerService } from '../../services/VideoPlayerService ';
 
 @Component({
   selector: 'app-artists-gallery',
   standalone: true,
-  imports: [CommonModule, VideoModalComponent],
+  imports: [CommonModule],
   templateUrl: './artists-gallery.component.html',
   styleUrls: ['./artists-gallery.component.css'],
 })
@@ -40,8 +41,7 @@ export class ArtistsGalleryComponent extends PreviewableComponent {
   startX = 0;
   scrollLeft = 0;
 
-  selectedURL: string | null = null;
-  selectedVideo: FileEntity | null = null;
+  private videoPlayerService = inject(VideoPlayerService);
 
   constructor(
     public commonService: CommonService,
@@ -60,23 +60,23 @@ export class ArtistsGalleryComponent extends PreviewableComponent {
     return 'assets/folder-icon.png';
   }
 
-clickVideo(video: FileEntity): void {
-  if (video.type === 'folder') {
-    this.logService.getVideos(video.path).subscribe((children) => {
-      if (children.length === 1 && children[0].type === 'file') {
-        // La carpeta solo tiene un video: reproducir directo, sin entrar
-        const singleVideo = children[0];
-        this.selectedVideo = singleVideo;
-        this.selectedURL = this.logService.getVideo(singleVideo.path);
-      } else {
-        this.folderSelected.emit(video);
-      }
-    });
-    return;
+  clickVideo(video: FileEntity): void {
+    if (video.type === 'folder') {
+      this.logService.getVideos(video.path).subscribe((children) => {
+        if (children.length === 1 && children[0].type === 'file') {
+          const singleVideo = children[0];
+          this.videoPlayerService.play(
+            singleVideo,
+            this.logService.getVideo(singleVideo.path),
+          );
+        } else {
+          this.folderSelected.emit(video);
+        }
+      });
+      return;
+    }
+    this.videoPlayerService.play(video, this.logService.getVideo(video.path));
   }
-  this.selectedVideo = video;
-  this.selectedURL = this.logService.getVideo(video.path);
-}
 
   startPreview(video: FileEntity): void {
     if (video.type !== 'file') {
@@ -103,44 +103,34 @@ clickVideo(video: FileEntity): void {
     return this.videos.length > 0 && this.videos[0].type === 'file';
   }
 
-
   moveLeft() {
-  this.carousel.nativeElement.scrollBy({
-    left: -300,
-    behavior: 'smooth',
-  });
-}
+    this.carousel.nativeElement.scrollBy({ left: -300, behavior: 'smooth' });
+  }
 
-moveRight() {
-  this.carousel.nativeElement.scrollBy({
-    left: 300,
-    behavior: 'smooth',
-  });
-}
+  moveRight() {
+    this.carousel.nativeElement.scrollBy({ left: 300, behavior: 'smooth' });
+  }
 
-mouseDown(event: MouseEvent) {
-  this.isDown = true;
-  const carousel = this.carousel.nativeElement;
-  this.startX = event.pageX - carousel.offsetLeft;
-  this.scrollLeft = carousel.scrollLeft;
-}
+  mouseDown(event: MouseEvent) {
+    this.isDown = true;
+    const carousel = this.carousel.nativeElement;
+    this.startX = event.pageX - carousel.offsetLeft;
+    this.scrollLeft = carousel.scrollLeft;
+  }
 
-mouseLeave() {
-  this.isDown = false;
-}
+  mouseLeave() {
+    this.isDown = false;
+  }
 
-mouseUp() {
-  this.isDown = false;
-}
+  mouseUp() {
+    this.isDown = false;
+  }
 
-mouseMove(event: MouseEvent) {
-  if (!this.isDown) return;
-
-  const carousel = this.carousel.nativeElement;
-  const x = event.pageX - carousel.offsetLeft;
-  const walk = (x - this.startX) * 2;
-
-  carousel.scrollLeft = this.scrollLeft - walk;
-}
-
+  mouseMove(event: MouseEvent) {
+    if (!this.isDown) return;
+    const carousel = this.carousel.nativeElement;
+    const x = event.pageX - carousel.offsetLeft;
+    const walk = (x - this.startX) * 2;
+    carousel.scrollLeft = this.scrollLeft - walk;
+  }
 }
